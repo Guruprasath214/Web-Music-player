@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Music Player - Internship Project</title>
+     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
+
+        <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer">
+     <link rel="stylesheet" href="style.css" onerror="console.error('Failed to load style.css')">
+    <script>
+        (function() {
+            var root = document.documentElement;
+            function apply(mode){ if(mode){ root.setAttribute('data-color-scheme', mode); } else { root.removeAttribute('data-color-scheme'); } }
+            try {
+                var saved = localStorage.getItem('color-scheme');
+                if (saved) {
+                    apply(saved);
+                } else {
+                    var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    apply(dark ? 'dark' : 'light');
+                }
+                if (window.matchMedia) {
+                    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+                    if (mq.addEventListener) {
+                        mq.addEventListener('change', function(e){ if(!localStorage.getItem('color-scheme')) apply(e.matches ? 'dark' : 'light'); });
+                    } else if (mq.addListener) {
+                        mq.addListener(function(e){ if(!localStorage.getItem('color-scheme')) apply(e.matches ? 'dark' : 'light'); });
+                    }
+                }
+                window.setColorScheme = function(mode){ localStorage.setItem('color-scheme', mode); apply(mode); };
+            } catch (_) {}
+        })();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="app-title">
+                
+                 Web Music Player
+                <span class="subtitle"></span>
+                <button id="themeToggle" class="theme-toggle" title="Toggle theme" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </h1>
+        </header>
+
+        <main class="main-content">
+            
+            <section class="player-section">
+                <div class="player-container">
+                   
+                    <div class="album-cover">
+                        <i class="fas fa-compact-disc spinning" id="albumIcon"></i>
+                    </div>
+
+                    
+                    <div class="song-info">
+                        <h2 class="song-title" id="currentTitle">Select a song to play</h2>
+                        <p class="song-artist" id="currentArtist">No artist selected</p>
+                    </div>
+
+                    
+                    <div class="player-controls">
+                        <button class="control-btn" id="prevBtn" title="Previous (Left Arrow)">
+                            <i class="fas fa-step-backward"></i>
+                        </button>
+                        <button class="control-btn play-pause-btn" id="playPauseBtn" title="Play/Pause (Spacebar)">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="control-btn" id="nextBtn" title="Next (Right Arrow)">
+                            <i class="fas fa-step-forward"></i>
+                        </button>
+                    </div>
+
+                    
+                    <div class="progress-container">
+                        <span class="time-display" id="currentTime">0:00</span>
+                        <div class="progress-bar" id="progressBar">
+                            <div class="progress-fill" id="progressFill"></div>
+                            <div class="progress-handle" id="progressHandle"></div>
+                        </div>
+                        <span class="time-display" id="totalTime">0:00</span>
+                    </div>
+
+                    
+                    <div class="volume-container">
+                        <i class="fas fa-volume-up volume-icon"></i>
+                        <div class="volume-slider">
+                            <input type="range" id="volumeSlider" min="0" max="100" value="70" class="slider">
+                        </div>
+                        <span class="volume-display" id="volumeDisplay">70%</span>
+                    </div>
+                </div>
+            </section>
+
+           
+            <section class="playlist-section">
+                <h3 class="playlist-title">Playlist</h3>
+                <div class="playlist-container" id="playlistContainer">
+                    <!-- Playlist items will be populated by JavaScript -->
+                </div>
+            </section>
+        </main>
+
+        
+
+        
+        <audio id="audioPlayer" preload="metadata"></audio>
+    </div>
+
+    
+    <div class="keyboard-shortcuts">
+        <div class="shortcuts-toggle" id="shortcutsToggle">
+            <i class="fas fa-keyboard"></i>
+        </div>
+        <div class="shortcuts-panel hidden" id="shortcutsPanel">
+            <h4>Keyboard Shortcuts</h4>
+            <ul>
+                <li><kbd>Space</kbd> Play/Pause</li>
+                <li><kbd>←</kbd> Previous track</li>
+                <li><kbd>→</kbd> Next track</li>
+                <li><kbd>↑</kbd> Volume up</li>
+                <li><kbd>↓</kbd> Volume down</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
